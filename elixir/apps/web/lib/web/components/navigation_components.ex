@@ -155,7 +155,7 @@ defmodule Web.NavigationComponents do
   def main_ml_class(false = _temporary_assigns_aside_collapsed), do: "md:ml-64"
 
   attr :aside_collapsed, :boolean, required: true
-
+  attr :id, :string, required: true
   defp sidebar_handler(assigns) do
     rotate = if assigns.aside_collapsed,
       do: "" , else: "rotate-180"
@@ -272,7 +272,6 @@ defmodule Web.NavigationComponents do
 
   def sidebar_item_group(%{aside_collapsed: true} = assigns) do
     is_active = sidebar_item_group_active?(assigns.item, assigns.section)
-    |> IO.inspect()
     active_color = if is_active, do: "orange-500", else: "gray-900"
     assigns = Map.put(assigns, :active_color, active_color)
 
@@ -310,16 +309,7 @@ defmodule Web.NavigationComponents do
     """
   end
 
-  defp sidebar_item_group_active?(items, section) do
-    Enum.any?(items, fn item ->
-      %{phoenix_live_view: {item_section, _, _, _}} =
-        Phoenix.Router.route_info(Web.Router, "GET", item.navigate, nil)
-
-      item_section == section
-    end)
-  end
-
-  def sidebar_item_group(assigns) do
+  def sidebar_item_group(%{aside_collapsed: _} = assigns) do
     ~H"""
     <li>
       <button
@@ -360,6 +350,15 @@ defmodule Web.NavigationComponents do
       </ul>
     </li>
     """
+  end
+
+  defp sidebar_item_group_active?(items, section) do
+    Enum.any?(items, fn item ->
+      %{phoenix_live_view: {item_section, _, _, _}} =
+        Phoenix.Router.route_info(Web.Router, "GET", item.navigate, nil)
+
+      item_section == section
+    end)
   end
 
   @doc """

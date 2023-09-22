@@ -1,7 +1,11 @@
 defmodule Web.Plugs.TemporaryAssigns do
   import Phoenix.Component
 
-  def on_mount(:temporary_assigns, params, session, socket) do
+  def init(args), do: args
+
+  def call(conn, _args), do: {:ok, conn}
+
+  def on_mount(:temporary_assigns, _params, _session, socket) do
     aside_collapsed = get_in(socket.assigns, [:temporary_assigns, :aside_collapsed])
 
     socket =

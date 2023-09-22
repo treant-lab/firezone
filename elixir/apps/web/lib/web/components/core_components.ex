@@ -607,9 +607,9 @@ defmodule Web.CoreComponents do
 
   def status_page_widget(%{collapsed: true} = assigns) do
     ~H"""
-    <div class="absolute group-hover:block hidden ml-2 left-[100%] top-[6.5px] space-x-4 w-64 lg:flex dark:bg-gray-800 z-20">
+    <div class="absolute ml-2 left-[100%] top-[6.5px] space-x-4 w-64 lg:flex dark:bg-gray-800 z-20">
       <.link href="https://firezone.statuspage.io" class="text-xs hover:underline">
-        <div id="status-page-widget" phx-update="stream"  phx-hook="StatusPage" />
+        <div id="status-page-widget" phx-update="stream"  phx-hook="StatusPage" class="group-hover:block hidden" />
       </.link>
     </div>
     """
