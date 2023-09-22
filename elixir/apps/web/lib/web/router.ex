@@ -27,6 +27,10 @@ defmodule Web.Router do
     plug :ensure_authenticated_actor_type, :account_admin_user
   end
 
+  pipeline :temporary_assigns do
+    plug Web.Plugs.TemporaryAssigns
+  end
+
   scope "/browser", Web do
     pipe_through :public
 
@@ -95,7 +99,8 @@ defmodule Web.Router do
         Web.Sandbox,
         {Web.Auth, :ensure_authenticated},
         {Web.Auth, :ensure_account_admin_user_actor},
-        {Web.Auth, :mount_account}
+        {Web.Auth, :mount_account},
+        {Web.Plugs.TemporaryAssigns, :temporary_assigns}
       ] do
       live "/dashboard", Dashboard
 

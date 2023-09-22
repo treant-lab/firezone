@@ -605,6 +605,16 @@ defmodule Web.CoreComponents do
     """
   end
 
+  def status_page_widget(%{collapsed: true} = assigns) do
+    ~H"""
+    <div class="absolute group-hover:block hidden ml-2 left-[100%] top-[6.5px] space-x-4 w-64 lg:flex dark:bg-gray-800 z-20">
+      <.link href="https://firezone.statuspage.io" class="text-xs hover:underline">
+        <div id="status-page-widget" phx-update="stream"  phx-hook="StatusPage" />
+      </.link>
+    </div>
+    """
+  end
+
   def status_page_widget(assigns) do
     ~H"""
     <div class="absolute bottom-0 left-0 justify-left p-4 space-x-4 w-full lg:flex bg-white dark:bg-gray-800 z-20">
@@ -614,6 +624,7 @@ defmodule Web.CoreComponents do
     </div>
     """
   end
+
 
   attr :type, :string, default: "default"
   attr :class, :string, default: nil

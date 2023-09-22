@@ -32,15 +32,24 @@ let statusIndicatorClassNames = {
 
 const statusUpdater = function () {
   const self = this
-  const sp = new StatusPage.page({ page: "firezone" })
+  const sp = new StatusPage.page({
+    page: "firezone"
+  })
 
   sp.summary({
     success: function (data) {
+      const statusIndicatorClasses = statusIndicatorClassNames[data.status.indicator];
       self.el.innerHTML = `
-        <span class="text-xs font-medium mr-2 px-2.5 py-0.5 rounded ${statusIndicatorClassNames[data.status.indicator]}">
+        <span class="text-xs font-medium mr-2 px-2.5 py-0.5 rounded ${statusIndicatorClasses}">
           ${data.status.description}
         </span>
       `
+      const collapsedStatusEl = document.getElementById('collapsed-status');
+      if (collapsedStatusEl) {
+        statusIndicatorClasses.split(' ').forEach((className) => {
+          collapsedStatusEl.classList.add(className)
+        });
+      }
     },
     error: function (data) {
       console.error("An error occurred while fetching status page data")
@@ -52,6 +61,19 @@ const statusUpdater = function () {
 Hooks.StatusPage = {
   mounted: statusUpdater,
   updated: statusUpdater,
+}
+
+Hooks.Aside = {
+  mounted: function () {
+    window.addEventListener("phx:aside:toggle-collapse-menu", (event) => {
+      localStorage.setItem("aside:collapse-menu", event.detail.aside_collapsed);
+    })
+    const currentMenuState = localStorage.getItem("aside:collapse-menu") || false;
+
+    this.pushEvent("collapse-menu-state", {
+      aside_collapsed: currentMenuState
+    })
+  }
 }
 
 export default Hooks
