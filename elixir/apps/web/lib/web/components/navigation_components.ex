@@ -229,18 +229,17 @@ defmodule Web.NavigationComponents do
     assigns = add_active_color_to_assign(assigns)
 
     ~H"""
-    <li>
+    <li style={"color: #{@active_color}"}>
       <.link navigate={@navigate} class={~w[
       flex items-center p-2
       text-base font-medium
       rounded-lg
       hover:bg-gray-100
-      dark:text-white dark:hover:bg-gray-700 group text-#{@active_color}]}>
+      dark:text-white dark:hover:bg-gray-700 group]}>
         <.icon name={@icon} class={~w[
         w-6 h-6
         transition duration-75
-
-        dark:text-gray-400 dark:group-hover:text-white text-#{@active_color}]} />
+        dark:text-gray-400 dark:group-hover:text-white ]} />
         <span class="ml-3 group-[&.not-collapsed]:block hidden">
           <%= render_slot(@inner_block) %>
         </span>
@@ -254,7 +253,7 @@ defmodule Web.NavigationComponents do
       Phoenix.Router.route_info(Web.Router, "GET", assigns.navigate, nil)
 
     is_active? = section == assigns.section
-    active_color = if is_active?, do: "orange-500", else: "gray-900"
+    active_color = if is_active?, do: "#f97316", else: "#111827"
     Map.put(assigns, :active_color, active_color)
   end
 
@@ -272,20 +271,20 @@ defmodule Web.NavigationComponents do
 
   def sidebar_item_group(%{aside_collapsed: true} = assigns) do
     is_active = sidebar_item_group_active?(assigns.item, assigns.section)
-    active_color = if is_active, do: "orange-500", else: "gray-900"
+    active_color = if is_active, do: "#f97316", else: "#111827"
     assigns = Map.put(assigns, :active_color, active_color)
 
     ~H"""
-    <li class="group absolute z-40">
+    <li style={"color: #{@active_color}"} class="group absolute z-40">
       <button
         class={~w[
           flex items-center p-2 w-auto group rounded-lg
-          text-base font-medium text-#{@active_color}
+          text-base font-medium
           transition duration-75
           hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700]}
       >
         <.icon name={@icon} class={~w[
-          w-6 h-6 text-#{@active_color}
+          w-6 h-6
           transition duration-75
           group-hover:text-gray-900
           dark:text-gray-400 dark:group-hover:text-white]} />
@@ -296,9 +295,9 @@ defmodule Web.NavigationComponents do
       >
         <li :for={item <- @item}>
           <% item = add_active_color_to_assign(Map.put(item, :section, @section)) %>
-          <.link navigate={item.navigate} class={~w[
+          <.link style={"color: #{item.active_color}"} navigate={item.navigate} class={~w[
               flex items-center p-2  w-full group
-              text-base font-medium text-#{item.active_color}
+              text-base font-medium
               transition duration-75
               hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700]}>
             <%= render_slot(item) %>
@@ -339,9 +338,9 @@ defmodule Web.NavigationComponents do
       <ul id={"dropdown-#{@id}"} class="py-2 space-y-2">
         <li :for={item <- @item}>
         <% item = add_active_color_to_assign(Map.put(item, :section, @section)) %>
-          <.link navigate={item.navigate} class={~w[
+          <.link navigate={item.navigate} style={"color: #{item.active_color}"} class={~w[
               flex items-center p-2 pl-11 w-full group rounded-lg
-              text-base font-medium text-#{item.active_color}
+              text-base font-medium
               transition duration-75
               hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700]}>
             <%= render_slot(item) %>
