@@ -24,7 +24,7 @@ defmodule Web.Live.Handlers.Aside do
           update(
             socket,
             :temporary_assigns,
-            &[section: &1[:section], aside_collapsed: String.to_atom(state)]
+            &[section: &1[:section], aside_collapsed: state == "true"]
           )
 
         {:noreply, socket}
